@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Rock Paper Scissors</title>
     <link rel="stylesheet" href="./styles.css" />
-    <script type="text/javascript" src="./script.js"></script>
   </head>
 
   <body>
@@ -22,18 +21,20 @@
         </div>
 
         <div id="scores">
-          <div class="border" id="playerScore">
-            <span>Player Score: 0</span>
+          <div class="border">
+            <span id="playerScore"></span>
           </div>
-          <div class="border" id="computerScore">
-            <span>Computer Score: 0</span>
+          <div class="border">
+            <span id="computerScore"></span>
           </div>
         </div>
         <div class="border" id="result">
-          <span>Play a round to display the results</span>
+          <span></span>
         </div>
-        <button id="playAgain" hidden>Play Again!</button>
+        <button id="resetButton">Play Again!</button>
       </div>
     </main>
   </body>
+
+  <script type="text/javascript" src="./script.js"></script>
 </html>

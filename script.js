@@ -1,3 +1,9 @@
+let playerScore;
+let computerScore;
+let resultText;
+const selections = this.document.querySelectorAll("#selections > button");
+const resetButton = this.document.querySelector("#resetButton");
+
 function getComputerChoice() {
   const selections = ["rock", "paper", "scissors"];
   const index = Math.floor(Math.random() * selections.length);
@@ -6,12 +12,14 @@ function getComputerChoice() {
   return sel;
 }
 
-function playRound(playerSelection, computerSelection) {
-  playerSelection = playerSelection.toLowerCase();
-  computerSelection = computerSelection.toLowerCase();
+function playRound() {
+  playerSelection = this.id;
+  computerSelection = getComputerChoice();
 
   if (playerSelection == computerSelection) {
-    return 0;
+    resultText = "It's a tie!";
+    gameUpdate();
+    return;
   }
 
   if (
@@ -19,35 +27,58 @@ function playRound(playerSelection, computerSelection) {
     (playerSelection == "paper" && computerSelection == "rock") ||
     (playerSelection == "scissors" && computerSelection == "paper")
   ) {
-    return 1;
+    playerScore++;
+    resultText = `You win! ${playerSelection.toUpperCase()} beats ${computerSelection.toUpperCase()}`;
+    gameUpdate();
+    return;
   }
 
-  return -1;
+  computerScore++;
+  resultText = `You lose! ${computerSelection.toUpperCase()} beats ${playerSelection.toUpperCase()}`;
+  gameUpdate();
+  return;
 }
 
-function game() {
-  let playerScore = 0;
-  const rounds = 5;
-  for (let i = 0; i < rounds; ++i) {
-    let playerSelection = prompt("What's your play?");
-    let computerSelection = getComputerChoice();
-    let result = playRound(playerSelection, computerSelection);
-    playerScore += result;
+function gameUpdate() {
+  const playerScoreDisplay = document.querySelector("#playerScore");
+  const computerScoreDisplay = document.querySelector("#computerScore");
+  const resultDisplay = document.querySelector("#result");
 
-    if (result == 1) {
-      console.log(`You win! ${playerSelection} beats ${computerSelection}`);
-    } else if (result == -1) {
-      console.log(`You lose! ${computerSelection} beats ${playerSelection}`);
-    } else {
-      console.log("It's a tie!");
-    }
+  if (playerScore == 5) {
+    resultText = "The player wins!";
+    gameEnd();
+  } else if (computerScore == 5) {
+    resultText = "The computer wins!";
+    gameEnd();
   }
 
-  if (playerScore == rounds - playerScore) {
-    console.log("The game resulted in a tie!");
-  } else if (playerScore > rounds - playerScore) {
-    console.log("The player wins!");
-  } else {
-    console.log("The computer wins!");
-  }
+  playerScoreDisplay.textContent = `Player Score: ${playerScore}`;
+  computerScoreDisplay.textContent = `Computer Score: ${computerScore}`;
+  resultDisplay.textContent = resultText;
 }
+
+function gameReset() {
+  playerScore = 0;
+  computerScore = 0;
+  resultText = "Click one of the buttons to start the game";
+
+  selections.forEach((selection) =>
+    selection.addEventListener("click", playRound)
+  );
+  resetButton.removeEventListener("click", gameReset);
+  resetButton.style.visibility = "hidden";
+  gameUpdate();
+  return;
+}
+
+function gameEnd() {
+  selections.forEach((selection) =>
+    selection.removeEventListener("click", playRound)
+  );
+
+  resetButton.addEventListener("click", gameReset);
+  resetButton.style.visibility = "visible";
+}
+
+gameReset();
+gameUpdate();
